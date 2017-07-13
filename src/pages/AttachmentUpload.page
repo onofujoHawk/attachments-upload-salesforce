@@ -1,0 +1,79 @@
+<apex:page tabStyle="Product2" 
+		   controller="AttachmentUploadController" 
+		   cache="true" 
+		   expires="30">
+
+  <apex:sectionHeader title="Salesforce Attachment" 
+  subtitle="Upload files using Visualforce."/>
+
+  <apex:form enctype="multipart/form-data" id="form">
+    <apex:pageMessages id="message"/>
+
+    <!-- first block -->
+    <apex:pageBlock title="Carica un'allegato su Salesforce.">
+      <apex:pageBlockSection showHeader="false" columns="3" id="block1" collapsible="false">
+
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="Nome del File:" for="fileName"/>
+      	  <apex:outputPanel styleClass="requiredInput" layout="block">
+			 <apex:outputPanel styleClass="requiredBlock" layout="block" />
+      		 <apex:inputText value="{!attachment.Name}" id="fileName"/>
+      	  </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="Seleziona File:" for="file"/>
+          <apex:outputPanel styleClass="requiredInput" layout="block">
+			 <apex:outputPanel styleClass="requiredBlock" layout="block" />
+          	 <apex:inputFile value="{!attachment.Body}" filename="{!attachment.Name}" id="file"/>
+          </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="Descrizione:" for="description"/>
+          <apex:inputTextarea value="{!attachment.Description}" id="description"/>
+        </apex:pageBlockSectionItem>
+
+      </apex:pageBlockSection>
+ 	</apex:pageBlock>
+
+ 	<!-- second block -->
+ 	<apex:pageBlock >
+      <apex:pageBlockButtons location="bottom" >
+        <apex:commandButton action="{!upload}" value="Salva"/>
+        <apex:commandButton action="/setup/forcecomHomepage.apexp?setupid=ForceCom" 
+        value="Indietro" immediate="true"/>
+      </apex:pageBlockButtons>
+
+ 	  <apex:pageBlockSection showHeader="false" columns="2" id="block2" collapsible="false" >
+        <apex:pageBlockSectionItem >
+    	 <apex:outputLabel value="Oggetto Salesforce:" for="sobject"/>
+    	 <apex:outputPanel styleClass="requiredInput" layout="block">
+			<apex:outputPanel styleClass="requiredBlock" layout="block" />
+			<!-- check this out -->
+			<apex:actionRegion immediate="true" id="region">
+          	<apex:selectList value="{!sObjectName}" id="sobject" multiselect="false" size="1">
+          	  <!-- and this one too -->
+	          <apex:actionSupport event="onchange" reRender="form" status="status"/>
+  			  <apex:selectOptions value="{!objects}"/>
+          	</apex:selectList>
+         </apex:actionRegion>
+		 </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="Record Oggetto:" for="record"/>
+          <apex:outputPanel styleClass="requiredInput" layout="block">
+			<apex:outputPanel styleClass="requiredBlock" layout="block" />
+	          <apex:selectList value="{!sObjectId}" id="record" multiselect="false" size="1">
+	  			<apex:selectOptions value="{!records}"/>
+	          </apex:selectList>
+	      </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+
+      </apex:pageBlockSection>
+    </apex:pageBlock>
+
+  </apex:form>  
+
+</apex:page>
